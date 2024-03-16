@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deposit or Withdraw balance with Javascript</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"/>
+    <style>
+        body{
+            margin: 0%;
+            padding-top: 100px;
+            background-color: dodgerblue;
+        }
+
+        .submitArea{
+            padding: 30px;
+            margin-top: 50px;
+            border-radius: 10px;
+            color: white;
+            background-color: royalblue;
+        }
+
+        .accountArea{
+            margin-top: 5%;
+        }
+
+        .deposit {
+            background-color: slateblue;
+        }
+
+        .withdraw {
+            background-color: lightsalmon;
+        }
+
+        .balance {
+            background-color: tomato;
+        }
+
+        .status {
+            margin: 0 20px;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="accountArea">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-3">
+                <div class="depositStatus">
+                    <h5>Deposit</h5>
+                    <h2>$<span id="currentDeposit">00</span></h2>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-3">
+                <div class="withDrawStatus">
+                    <h5>Withdrawl</h5>
+                    <h2>$<span id="currentWithdraw">00</span></h2>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-3">
+                <div class="balanceStatus">
+                    <h5>Balance</h5>
+                    <h2>$<span id="balanceStatus">1200</span></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="submitArea">
+                    <h4>Deposit Amount</h4>
+                    <input
+                            id="depositAmount"
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter Deposit Amount"
+                    />
+                    <br />
+                    <button id="depositBtn" class="btn btn-success">Deposit</button>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="submitArea">
+                    <h4>Withdraw Amount</h4>
+                    <input
+                            id="withdrawAmount"
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter withdraw amount"
+                    /><br />
+                    <button id="withdrawBtn" class="btn btn-success">
+                        Withdraw
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const depositBtn = document.getElementById('depositBtn');
+    depositBtn.addEventListener('click', function() {
+        const depositAmount = getInputNumber("depositAmount");
+        updateSpan("currentDeposit", depositAmount);
+        updateSpan("balanceStatus", depositAmount);
+        document.getElementById('depositAmount').value = "";
+    });
+
+    const withdrawBtn = document.getElementById('withdrawBtn');
+    withdrawBtn.addEventListener('click', function() {
+        const withdrawAmount = getInputNumber("withdrawAmount");
+        const currentBalance = parseFloat(document.getElementById("balanceStatus").innerText);
+
+        if (withdrawAmount <= currentBalance) {
+            updateSpan("currentWithdraw", withdrawAmount);
+            updateSpan("balanceStatus", -1 * withdrawAmount);
+        } else {
+            alert("Insufficient balance for withdrawal!");
+        }
+        document.getElementById('withdrawAmount').value = "";
+    });
+
+    function getInputNumber(idName) {
+        const amount = document.getElementById(idName).value;
+        return parseFloat(amount) || 0;
+    } 
+
+    function updateSpan(idName, addedNumber) {
+        const element = document.getElementById(idName);
+        if (element) {
+            const current = parseFloat(element.innerText);
+            const total = current + addedNumber;
+            element.innerText = total.toFixed(2);
+        } else {
+            console.error("Element with ID", idName, "not found");
+        }
+    }
+</script>
+</body>
+</html>
